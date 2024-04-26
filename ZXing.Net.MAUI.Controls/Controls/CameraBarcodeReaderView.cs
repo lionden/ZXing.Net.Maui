@@ -10,60 +10,63 @@ using ZXing.Net.Maui;
 
 namespace ZXing.Net.Maui.Controls
 {
-	public partial class CameraBarcodeReaderView : View, ICameraBarcodeReaderView
-	{
-		public event EventHandler<BarcodeDetectionEventArgs> BarcodesDetected;
-		public event EventHandler<CameraFrameBufferEventArgs> FrameReady;
+    public partial class CameraBarcodeReaderView : View, ICameraBarcodeReaderView
+    {
+        public event EventHandler<BarcodeDetectionEventArgs> BarcodesDetected;
+        public event EventHandler<CameraFrameBufferEventArgs> FrameReady;
 
-		void ICameraBarcodeReaderView.BarcodesDetected(BarcodeDetectionEventArgs e) => BarcodesDetected?.Invoke(this, e);
-		void ICameraFrameAnalyzer.FrameReady(ZXing.Net.Maui.CameraFrameBufferEventArgs e) => FrameReady?.Invoke(this, e);
+        void ICameraBarcodeReaderView.BarcodesDetected(BarcodeDetectionEventArgs e) => BarcodesDetected?.Invoke(this, e);
+        void ICameraFrameAnalyzer.FrameReady(ZXing.Net.Maui.CameraFrameBufferEventArgs e) => FrameReady?.Invoke(this, e);
 
-		public static readonly BindableProperty OptionsProperty =
-			BindableProperty.Create(nameof(Options), typeof(BarcodeReaderOptions), typeof(CameraBarcodeReaderView), defaultValueCreator: bindableObj => new BarcodeReaderOptions());
+        public static readonly BindableProperty OptionsProperty =
+            BindableProperty.Create(nameof(Options), typeof(BarcodeReaderOptions), typeof(CameraBarcodeReaderView), defaultValueCreator: bindableObj => new BarcodeReaderOptions());
 
-		public BarcodeReaderOptions Options
-		{
-			get => (BarcodeReaderOptions)GetValue(OptionsProperty);
-			set => SetValue(OptionsProperty, value);
-		}
+        public BarcodeReaderOptions Options
+        {
+            get => (BarcodeReaderOptions)GetValue(OptionsProperty);
+            set => SetValue(OptionsProperty, value);
+        }
 
-		public static readonly BindableProperty IsDetectingProperty =
-			BindableProperty.Create(nameof(IsDetecting), typeof(bool), typeof(CameraBarcodeReaderView), defaultValue: true);
+        public static readonly BindableProperty IsDetectingProperty =
+            BindableProperty.Create(nameof(IsDetecting), typeof(bool), typeof(CameraBarcodeReaderView), defaultValue: true);
 
-		public bool IsDetecting
-		{
-			get => (bool)GetValue(IsDetectingProperty);
-			set => SetValue(IsDetectingProperty, value);
-		}
+        public bool IsDetecting
+        {
+            get => (bool)GetValue(IsDetectingProperty);
+            set => SetValue(IsDetectingProperty, value);
+        }
 
-		void Handler_FrameReady(object sender, CameraFrameBufferEventArgs e)
-			=> FrameReady?.Invoke(this, e);
+        void Handler_FrameReady(object sender, CameraFrameBufferEventArgs e)
+            => FrameReady?.Invoke(this, e);
 
-		public static readonly BindableProperty IsTorchOnProperty =
-			BindableProperty.Create(nameof(IsTorchOn), typeof(bool), typeof(CameraBarcodeReaderView), defaultValue: false);
+        public static readonly BindableProperty IsTorchOnProperty =
+            BindableProperty.Create(nameof(IsTorchOn), typeof(bool), typeof(CameraBarcodeReaderView), defaultValue: false);
 
-		public bool IsTorchOn
-		{
-			get => (bool)GetValue(IsTorchOnProperty);
-			set => SetValue(IsTorchOnProperty, value);
-		}
+        public bool IsTorchOn
+        {
+            get => (bool)GetValue(IsTorchOnProperty);
+            set => SetValue(IsTorchOnProperty, value);
+        }
 
-		public static readonly BindableProperty CameraLocationProperty =
-			BindableProperty.Create(nameof(CameraLocation), typeof(CameraLocation), typeof(CameraBarcodeReaderView), defaultValue: CameraLocation.Rear);
+        public static readonly BindableProperty CameraLocationProperty =
+            BindableProperty.Create(nameof(CameraLocation), typeof(CameraLocation), typeof(CameraBarcodeReaderView), defaultValue: CameraLocation.Rear);
 
-		public CameraLocation CameraLocation
-		{
-			get => (CameraLocation)GetValue(CameraLocationProperty);
-			set => SetValue(CameraLocationProperty, value);
-		}
+        public CameraLocation CameraLocation
+        {
+            get => (CameraLocation)GetValue(CameraLocationProperty);
+            set => SetValue(CameraLocationProperty, value);
+        }
 
-		public void AutoFocus()
-			=> StrongHandler?.Invoke(nameof(AutoFocus), null);
+        public void AutoFocus()
+            => StrongHandler?.Invoke(nameof(AutoFocus), null);
 
-		public void Focus(Point point)
-			=> StrongHandler?.Invoke(nameof(Focus), point);
+        public void Focus(Point point)
+            => StrongHandler?.Invoke(nameof(Focus), point);
 
-		CameraBarcodeReaderViewHandler StrongHandler
-			=> Handler as CameraBarcodeReaderViewHandler;
-	}
+        public void Dispose()
+            => StrongHandler.Dispose();
+
+        CameraBarcodeReaderViewHandler StrongHandler
+            => Handler as CameraBarcodeReaderViewHandler;
+    }
 }

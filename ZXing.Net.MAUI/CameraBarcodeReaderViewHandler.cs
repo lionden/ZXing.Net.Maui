@@ -91,6 +91,9 @@ namespace ZXing.Net.Maui
         public void AutoFocus()
             => cameraManager?.AutoFocus();
 
+        public void Dispose()
+            => cameraManager.Dispose();
+
         public static void MapFocus(CameraBarcodeReaderViewHandler handler, ICameraBarcodeReaderView cameraBarcodeReaderView, object? parameter)
         {
             if (parameter is not Point point)
